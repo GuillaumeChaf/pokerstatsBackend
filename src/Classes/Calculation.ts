@@ -11,6 +11,7 @@ import HighCard from "./Combinations/HighCard";
 import FormatAndMath from "./FormatAndMath";
 
 type Input = {
+    precision : number;
     freeCards : Card[];
     table : Table;
     players : any[];
@@ -33,7 +34,7 @@ export type Player = {
 export default class Calculation{
 
     nbLoop : number = 0;
-    nbRecursion : number = 2;
+    nbRecursion : number = 4;
     freeCards : Card[];
     table : Table;
     players : Player[];
@@ -47,6 +48,7 @@ export default class Calculation{
             this.players.push({id : element.id, cards : [element.card1, element.card2], score : 0})
         });
         this.splitScore = 0;
+        this.nbRecursion = obj.precision;
     }
 
     static test(){
