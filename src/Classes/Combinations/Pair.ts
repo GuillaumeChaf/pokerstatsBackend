@@ -1,4 +1,3 @@
-import ArrayGestion from './ArrayGestion';
 import {Card} from "../Calculation";
 
 export default class Pair{

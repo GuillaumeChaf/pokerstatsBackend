@@ -1,4 +1,4 @@
-import ArrayGestion from "./Combinations/ArrayGestion";
+import ArrayGestion from "./ArrayGestion";
 import Flush from "./Combinations/Flush";
 import Straight from "./Combinations/Straight";
 import FourOfAKind from "./Combinations/FourOfAKind";
@@ -16,16 +16,15 @@ type Input = {
     table : Table;
     players : any[];
 }
-
+type Table = {
+    cardsTable : Card[];
+    numberActivateCard : number;
+}
 export type Card = {
     value : string;
     symbol : string;
 }
 
-type Table = {
-    cardsTable : Card[];
-    numberActivateCard : number;
-}
 export type Player = {
     id : number,
     cards : Card[];
@@ -51,6 +50,7 @@ export default class Calculation{
         this.nbRecursion = obj.precision;
     }
 
+    //test calculation of cards here
     static test(){
         const arrayTest : Card[]= [
         {value : "2", symbol : "heart"},
@@ -72,6 +72,7 @@ export default class Calculation{
         //console.log(this.score(arrayTest));
     }
 
+    //process of calculation
     fullCalculation(){
         //format cards table
         let cards = this.table.cardsTable
@@ -85,6 +86,7 @@ export default class Calculation{
         this.loopRecursion(this.freeCards, cards, nbLoop);
     }
 
+    //recursivity of each combination we can find in the table 
     loopRecursion(freeCards : Card[], pickedCards : Card[],loop : number){
         if(loop == 0){
             this.scoreEach(pickedCards);
@@ -100,6 +102,7 @@ export default class Calculation{
         }
     }
     
+    //for one combination in table, calcul which player one, or splitpot if they are more than one
     scoreEach(cards : Card[]){
         let bestScore = 0;
         let bestPlayersIndex : number[] = [];
@@ -119,6 +122,8 @@ export default class Calculation{
         //points attribution
         (bestPlayersIndex.length > 1)? this.splitScore ++ : this.players[bestPlayersIndex[0]].score ++;
     }
+
+    //score a combination of cards from 4 to 7 cards
     score(cards : Card[]) : number{
        
         const sordOrdValue = ArrayGestion.splitArrayValue(cards);
@@ -155,6 +160,7 @@ export default class Calculation{
         return HighCard.calcul(sordOrdValue);
     }
 
+    //return the final score formatted
     getFinalScore () : Object {
         return FormatAndMath.formatResult(this.players, this.splitScore, this.nbLoop);
     }

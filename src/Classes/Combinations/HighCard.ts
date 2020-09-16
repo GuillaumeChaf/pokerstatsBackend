@@ -1,5 +1,4 @@
 import {Card} from "../Calculation";
-import ArrayGestion from './ArrayGestion';
 
 export default class HighCard{
 

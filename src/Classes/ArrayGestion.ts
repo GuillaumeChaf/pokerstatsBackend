@@ -1,7 +1,8 @@
-import {Card} from "../Calculation";
+import {Card} from "./Calculation";
 
 export default class ArrayGestion
 {
+  //return an array of array sort by value and by number of cards of the same values exemple : [[2,2,2], [A,A], [J,J], [Q], [5]]
   static splitArrayValue(cards : Card[]){
     const cardValued : string[] = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2", "aa"];
 
@@ -26,6 +27,7 @@ export default class ArrayGestion
     });
   }
 
+  //return an array of array sort by symbol exemple : [[Club, club], [Spade,Spade,Spade],[Diamond]]
   static splitArraySymbol(cards : Card[]){
 
     const cardValued : string[] = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2", "aa"];
@@ -58,6 +60,7 @@ export default class ArrayGestion
     return symbolSorted;
   }
 
+  //return an array of array. The cards are sort by values : exemple : [[A,A], [K], [J,J]]
   static splitArrayForStraight(cards : Card[]){
     const cardValued : string[] = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2", "aa"];
 
@@ -77,7 +80,8 @@ export default class ArrayGestion
     }
     return result;
   }
-  // remove a card from an array of card
+
+  // remove a card (2nd parameter) from an array of card(1rd parameter)
   static removeCard(cardTable: Card[], card: Card) : Card[] {
     let copyTable = cardTable.slice(0, cardTable.length);
     let index = copyTable.findIndex((element) => element.symbol === card.symbol && element.value === card.value);

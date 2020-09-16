@@ -1,4 +1,4 @@
-import express, {Request, Response, Application, NextFunction} from "express";
+import express, {Request, Response, Application} from "express";
 import  bodyParser from "body-parser";
 import Calculation from "./Classes/Calculation";
 var cors = require('cors')
@@ -16,6 +16,7 @@ app.post('/', (req : Request,res : Response) => {
     calc.fullCalculation()
     res.setHeader('Content-type', 'application/json');
     res.json(calc.getFinalScore());
+    console.log("Done")
 })
 
 app.listen(5000, () => {console.log("Server running")}
