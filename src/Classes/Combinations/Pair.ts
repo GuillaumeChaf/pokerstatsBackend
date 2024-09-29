@@ -1,26 +1,63 @@
-import {Card} from "../Calculation";
+import { Card } from "../bases/Card";
+import {
+  combinationCalculator,
+  combinationFactor,
+  factor,
+} from "./Combination";
 
-export default class Pair{
-
-  static checkCombination(combinationCard : Card[][]) : boolean{
-
-    for(let array of combinationCard){
-      if(array.length === 1) return false
-      if(array.length === 2) return true;
+export default class Pair implements combinationCalculator {
+  respect(n: number): boolean {
+    return Math.trunc(n / combinationFactor) === 1;
+  }
+  /**
+   * calcul de la combinaison en paramètre
+   * prérequis :
+   *  - 7 cartes sont en paramètre,
+   *  - il y a une et une seule paire, aucune autre combinaison, la maxPair est cette unique paire
+   *  - les cartes sont classés par ordre décroissant
+   * @param cards combinaison de 7 cartes
+   * @param maxPair la valeur de la paire max calculé au préalable
+   * @return le score
+   */
+  calcul(cards: Card[], maxPair: number): number {
+    let res = combinationFactor;
+    res += maxPair * factor[4];
+    let i = 0;
+    let fact = 3;
+    while (fact > 0) {
+      if (cards[i].value == maxPair) {
+        i = i + 2;
+        continue;
+      }
+      res += cards[i].value * factor[fact];
+      fact--;
+      i++;
     }
-    return false;
+    return res;
   }
 
-  static calcul(combinationCard : Card[][]) : number{
-    const cardValued : string[] = ["aa", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-    
-    let result = 1 * 10000000000;
-
-    result += cardValued.indexOf(combinationCard[0][0].value) * 100000000;
-    if(combinationCard[1] !== undefined) result += cardValued.indexOf(combinationCard[1][0].value) * 1000000;
-    if(combinationCard[2] !== undefined) result += cardValued.indexOf(combinationCard[2][0].value) * 10000;
-    if(combinationCard[3] !== undefined) result += cardValued.indexOf(combinationCard[3][0].value) * 100;
-
-    return result;
+  /**
+   * calcul de la combinaison en paramètre
+   * prérequis :
+   *  - il y a une et une seule paire, aucune autre combinaison, la maxPair est cette unique paire
+   *  - les cartes sont classés par ordre décroissant
+   * @param cards combinaison de cartes
+   * @param maxPair la valeur de la paire max calculé au préalable
+   * @return le score
+   */
+  calculFO(cards: Card[], maxPair: number): number {
+    let res = combinationFactor + maxPair * factor[4];
+    let i = 0;
+    let fact = 3;
+    while (fact > 0 && i < cards.length) {
+      if (cards[i].value == maxPair) {
+        i = i + 2;
+        continue;
+      }
+      res += cards[i].value * factor[fact];
+      fact--;
+      i++;
+    }
+    return res;
   }
 }

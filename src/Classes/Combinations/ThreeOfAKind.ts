@@ -1,23 +1,94 @@
-import {Card} from "../Calculation";
+import { Card } from "../bases/Card";
+import {
+  combinationCalculator,
+  combinationFactor,
+  factor,
+} from "./Combination";
 
-export default class ThreeOfAKind{
-
-  //combinationCard must be an array of multiple array sort by value and the first one is the longest one
-  static checkCombination(combinationCard : Card [][]) : boolean{
-
-    return combinationCard[0].length > 2
+export default class ThreeOfAKind implements combinationCalculator {
+  respect(n: number): boolean {
+    return Math.trunc(n / combinationFactor) === 3;
+  }
+  /**
+   * calcul de la combinaison en paramètre
+   * prérequis :
+   *  - 7 cartes sont en paramètre,
+   *  - les cartes sont classés par ordre de valeur décroissante
+   *  - il y a un brelan et pas de paire ni d'autre combinaison (quint, flush)
+   * @param cards combinaison de 7 cartes
+   * @return le score
+   */
+  calcul(cards: Card[]): number {
+    let tOAK: number = 0;
+    let first: number = 0;
+    let second: number = 0;
+    let i = 0;
+    while (!tOAK || !first || !second) {
+      if (cards[i]?.value === undefined) {
+        let a = 4;
+      }
+      if (cards[i].value == cards[i + 1].value) {
+        tOAK = cards[i].value;
+        i = i + 3;
+        continue;
+      }
+      if (!first) {
+        first = cards[i].value;
+        i++;
+        continue;
+      }
+      if (!second) {
+        second = cards[i].value;
+        i++;
+        continue;
+      }
+      i++;
+    }
+    return (
+      3 * combinationFactor +
+      tOAK * factor[4] +
+      first * factor[3] +
+      second * factor[2]
+    );
   }
 
-  static calcul(combinationCard : Card [][]) : number{
-
-    const cardValued : string[] = ["aa", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
-
-    let result = 3 * 10000000000;
-
-    result += cardValued.indexOf(combinationCard[0][0].value) * 100000000;
-    if(combinationCard[1] !== undefined) return result + cardValued.indexOf(combinationCard[1][0].value) * 1000000;
-    if(combinationCard[2] !== undefined) return result + cardValued.indexOf(combinationCard[2][0].value) * 10000;
-
-    return result;
+  /**
+   * calcul de la combinaison en paramètre
+   * prérequis :
+   *  - il y a entre 3 et 7 cartes
+   *  - les cartes sont classés par ordre de valeur décroissante
+   *  - il y a un brelan et pas de paire ni d'autre combinaison (quint, flush)
+   * @param cards combinaison de 7 cartes
+   * @return le score
+   */
+  calculFO(cards: Card[]): number {
+    let tOAK: number = 0;
+    let first: number = 0;
+    let second: number = 0;
+    let i = 0;
+    while ((!tOAK || !first || !second) && i < cards.length) {
+      if (cards[i].value == cards[i + 1]?.value) {
+        tOAK = cards[i].value;
+        i = i + 3;
+        continue;
+      }
+      if (!first) {
+        first = cards[i].value;
+        i++;
+        continue;
+      }
+      if (!second) {
+        second = cards[i].value;
+        i++;
+        continue;
+      }
+      i++;
+    }
+    return (
+      3 * combinationFactor +
+      tOAK * factor[4] +
+      first * factor[3] +
+      second * factor[2]
+    );
   }
 }

@@ -1,23 +1,33 @@
-import express, {Request, Response, Application} from "express";
-import  bodyParser from "body-parser";
-import Calculation from "./Classes/Calculation";
-var cors = require('cors')
+import express, { Request, Response, Application } from "express";
+import bodyParser from "body-parser";
+import { ComputePrompt } from "./Classes/bases/Response";
+import { Organiser } from "./Classes/processing/Organiser";
+import { statsCallback } from "./Classes/bases/types";
+var cors = require("cors");
 
-const app : Application = express();
+const app: Application = express();
 
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+  res.send("Pokerstats API");
+});
 //système de calcul pour éviter les erreur lorsqu'il y a moins de 4 cartes
-app.post('/', (req : Request,res : Response) => {
-    const calc = new Calculation(req.body);
-    calc.fullCalculation()
-    res.setHeader('Content-type', 'application/json');
-    res.json(calc.getFinalScore());
-    console.log("Done")
-})
+app.post(
+  "/",
+  (req: Request<never, never, ComputePrompt>, res: Response<statsCallback>) => {
+    const prompt = new ComputePrompt(req.body);
+    const date: number = new Date().getTime();
+    const callback = Organiser.startingProcess(prompt);
+    console.log((new Date().getTime() - date) / 1000);
+    res.setHeader("Content-type", "application/json");
+    res.json(callback);
+  }
+);
 
-app.listen(5000, () => {console.log("Server running")}
-)
+app.listen(3000, () => {
+  console.log("Server running");
+});
