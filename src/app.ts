@@ -20,9 +20,7 @@ app.post(
   "/",
   (req: Request<never, never, ComputePrompt>, res: Response<statsCallback>) => {
     const prompt = new ComputePrompt(req.body);
-    const date: number = new Date().getTime();
     const callback = Organiser.startingProcess(prompt);
-    console.log((new Date().getTime() - date) / 1000);
     res.setHeader("Content-type", "application/json");
     res.json(callback);
   }
